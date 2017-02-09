@@ -24,12 +24,23 @@
   (mapc (lambda(x) (spacemacs/declare-prefix-for-mode
                     'java-mode (car x) (cdr x)))
         java/key-binding-prefixes))
+
+(defun spacemacs//java-setup-backend ()
+  "Conditionally setup java backend."
+  (pcase java-backend
+    (`eclim (spacemacs//java-setup-eclim))
+    (`ensime (spacemacs//java-setup-ensime))
+    (`meghanada (spacemacs//setup-meghanada))))
+
 
 ;; ensime
 
 (autoload 'ensime-config-find-file "ensime-config")
 (autoload 'ensime-config-find "ensime-config")
 (autoload 'projectile-project-p "projectile")
+
+(defun spacemacs//java-setup-ensime ()
+  "Setup ENSIME.")
 
 (defun spacemacs//ensime-init (mode &optional enable-eldoc auto-start)
   (let ((hook (intern (format "%S-hook" mode)))
@@ -231,6 +242,17 @@
   (interactive)
   (ensime-type-at-point t t))
 
+
+;; eclim
+
+(defun spacemacs//java-setup-eclim ()
+  "Setup Eclim.")
+
+
+;; meghanada
+
+(defun spacemacs//java-setup-meghanada ()
+  "Setup Meghanada.")
 
 
 ;; Completion

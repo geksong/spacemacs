@@ -21,6 +21,7 @@
         groovy-mode
         helm-gtags
         (java-mode :location built-in)
+        meghanada
         ))
 
 (defun java/init-company-emacs-eclim ()
@@ -30,52 +31,6 @@
     (spacemacs|add-company-backends
       :backends company-emacs-eclim
       :modes java-mode)))
-
-(defun java/init-ensime ()
-  (use-package ensime
-    :defer t
-    :commands ensime-mode
-    :config
-    (progn
-      (setq ensime-startup-dirname (expand-file-name "ensime" spacemacs-cache-directory))
-      ;; key bindings
-      (spacemacs/ensime-configure-keybindings 'java-mode)
-      (evil-define-key 'insert ensime-mode-map
-        (kbd ".") 'spacemacs/ensime-completing-dot
-        (kbd "M-.") 'ensime-edit-definition
-        (kbd "M-,") 'ensime-pop-find-definition-stack)
-      (evil-define-key 'normal ensime-mode-map
-        (kbd "M-.") 'ensime-edit-definition
-        (kbd "M-,") 'ensime-pop-find-definition-stack)
-      (evil-define-key 'normal ensime-popup-buffer-map
-        (kbd "q") 'ensime-popup-buffer-quit-function)
-      (evil-define-key 'normal ensime-inspector-mode-map
-        (kbd "q") 'ensime-popup-buffer-quit-function)
-      (evil-define-key 'normal ensime-refactor-info-map
-        (kbd "q") 'spacemacs/ensime-refactor-cancel
-        (kbd "c") 'spacemacs/ensime-refactor-accept
-        (kbd "RET") 'spacemacs/ensime-refactor-accept)
-      (evil-define-key 'normal ensime-compile-result-map
-        (kbd "g") 'ensime-show-all-errors-and-warnings
-        (kbd "TAB") 'forward-button
-        (kbd "<backtab>") 'backward-button
-        (kbd "M-n") 'forward-button
-        (kbd "M-p") 'backward-button
-        (kbd "n") 'forward-button
-        (kbd "N") 'backward-button))))
-
-;; (defun java/post-init-ensime ()
-;;   (when (eq 'ensime java-backend)
-;;     (use-package ensime
-;;       :defer t
-;;       :init
-;;       (progn
-;;         (spacemacs//ensime-init 'java-mode t nil)
-;;         (when (configuration-layer/package-usedp 'company)
-;;           (push 'ensime-company company-backends-java-mode)))
-;;       :config
-;;       (progn
-;;         (spacemacs/ensime-configure-keybindings 'java-mode)))))
 
 (defun java/init-eclim ()
   (use-package eclim
@@ -192,6 +147,52 @@
 
         "tt" 'eclim-run-junit))))
 
+(defun java/init-ensime ()
+  (use-package ensime
+    :defer t
+    :commands ensime-mode
+    :config
+    (progn
+      (setq ensime-startup-dirname (expand-file-name "ensime" spacemacs-cache-directory))
+      ;; key bindings
+      (spacemacs/ensime-configure-keybindings 'java-mode)
+      (evil-define-key 'insert ensime-mode-map
+        (kbd ".") 'spacemacs/ensime-completing-dot
+        (kbd "M-.") 'ensime-edit-definition
+        (kbd "M-,") 'ensime-pop-find-definition-stack)
+      (evil-define-key 'normal ensime-mode-map
+        (kbd "M-.") 'ensime-edit-definition
+        (kbd "M-,") 'ensime-pop-find-definition-stack)
+      (evil-define-key 'normal ensime-popup-buffer-map
+        (kbd "q") 'ensime-popup-buffer-quit-function)
+      (evil-define-key 'normal ensime-inspector-mode-map
+        (kbd "q") 'ensime-popup-buffer-quit-function)
+      (evil-define-key 'normal ensime-refactor-info-map
+        (kbd "q") 'spacemacs/ensime-refactor-cancel
+        (kbd "c") 'spacemacs/ensime-refactor-accept
+        (kbd "RET") 'spacemacs/ensime-refactor-accept)
+      (evil-define-key 'normal ensime-compile-result-map
+        (kbd "g") 'ensime-show-all-errors-and-warnings
+        (kbd "TAB") 'forward-button
+        (kbd "<backtab>") 'backward-button
+        (kbd "M-n") 'forward-button
+        (kbd "M-p") 'backward-button
+        (kbd "n") 'forward-button
+        (kbd "N") 'backward-button))))
+
+;; (defun java/post-init-ensime ()
+;;   (when (eq 'ensime java-backend)
+;;     (use-package ensime
+;;       :defer t
+;;       :init
+;;       (progn
+;;         (spacemacs//ensime-init 'java-mode t nil)
+;;         (when (configuration-layer/package-usedp 'company)
+;;           (push 'ensime-company company-backends-java-mode)))
+;;       :config
+;;       (progn
+;;         (spacemacs/ensime-configure-keybindings 'java-mode)))))
+
 (defun java/post-init-ggtags ()
   (add-hook 'java-mode-local-vars-hook #'spacemacs/ggtags-mode-enable))
 
@@ -221,3 +222,7 @@
       (add-hook 'java-mode-local-vars-hook #'spacemacs//java-setup-backend)
       (spacemacs//java-define-command-prefixes))))
 
+(defun java/init-meghanada ()
+  (use-package meghanada
+    :defer t
+    ))
